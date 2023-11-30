@@ -1,59 +1,40 @@
 <script setup>
 import {reactive} from 'vue';
+import Calculadora from './components/Calculadora.vue'
+import Resultado from './components/Resultado.vue'
 
 
 const estado = reactive ({
+  operation: '+',
   a: '',
   b: '',
-  resultado: ''
+
 
 })
 
-function add(resultado){
-  resultado = estado.a + estado.b;
-  alert(resultado);
-    } 
-
-    function minus(resultado){
-  resultado = estado.a - estado.b;
-  alert(resultado);
-    } 
-    function times(resultado){
-  resultado = estado.a * estado.b;
-  alert(resultado);
-    } 
-    function divide(resultado){
-  resultado = estado.a / estado.b;
-  alert(resultado);
-    } 
+const resultado = ()=> {
+  const {operation} = estado
+    switch(operation) {
+      case'-':
+      return parseFloat(estado.a) - parseFloat(estado.b)
+      case'*':
+      return parseFloat(estado.a) * parseFloat(estado.b)
+      case'/':
+      return parseFloat(estado.a) / parseFloat(estado.b)
+      default:
+      return parseFloat(estado.a) + parseFloat(estado.b)
+    }
+}
 
 
 </script>
 
 <template>
-<div class="container mt-5">
-<div class="row">
-  <div class="col md-5">
-    <input v-model.number="estado.a" placeholder="Número" class="form-control">
-  </div>
-  <div class="col md-2">
-    <select class="form-control">
-      <option value="selecionar">Selecione</option>
-      <option @click="add" value="adicao">+</option>
-      <option @click="minus" value="subtracao">-</option>
-      <option @click="times" value="multiplicacao">*</option>
-      <option @click="divide" value="divisao">/</option>
-    </select>
-  </div>
-  <div class="col md-5">
-    <input v-model.number="estado.b" class="form-control">
-  </div>
-</div>
-<div class="col">
-
-</div>
-</div>
-</template>
+    <div class="container">
+      <Calculadora :operacao="evento=> estado.operation = evento.target.value" :a="evento=> estado.a = evento.target.value" :b="evento=> estado.b=evento.target.value" />
+      <Resultado :a="estado.a" :b="estado.b" :result="resultado()"/>
+    </div>
+  </template>
 
 <style scoped>
 
